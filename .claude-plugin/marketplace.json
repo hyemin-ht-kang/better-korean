@@ -1,0 +1,13 @@
+{
+  "name": "korean-polishing-marketplace",
+  "owner": {
+    "name": "hyemin-ht-kang"
+  },
+  "plugins": [
+    {
+      "name": "korean-polishing",
+      "source": "./",
+      "description": "한국어 윤문 룰 기반 텍스트 검증. 압축 조어·은유 설계 문장·명사 나열 직역투를 찾아 수정을 제안한다."
+    }
+  ]
+}
