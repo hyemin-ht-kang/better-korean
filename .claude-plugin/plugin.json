@@ -1,8 +1,13 @@
 {
   "name": "korean-polishing",
-  "version": "0.1.3",
-  "description": "한국어 윤문 룰 기반 텍스트 검증. 압축 조어·은유 설계 문장·명사 나열 직역투 등을 찾아 수정을 제안한다.",
+  "version": "0.1.4",
+  "description": "AI 가 쓴 한국어 문서의 어색하고 장황한 말투를 자연스러운 표현으로 고칩니다. 압축 조어, 은유 문장, 명사 나열 직역투를 찾아 수정을 제안합니다.",
   "author": {
-    "name": "hyemin-ht-kang"
-  }
+    "name": "hyemin-ht-kang",
+    "url": "https://github.com/hyemin-ht-kang"
+  },
+  "homepage": "https://github.com/hyemin-ht-kang/korean-polishing",
+  "repository": "https://github.com/hyemin-ht-kang/korean-polishing",
+  "license": "MIT",
+  "keywords": ["korean", "writing", "review", "documentation", "prose"]
 }
