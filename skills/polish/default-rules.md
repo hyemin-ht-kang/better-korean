@@ -1,6 +1,6 @@
 # 한국어 윤문 룰 (플러그인 표준)
 
-이 파일이 korean-polishing 플러그인의 표준 룰 원본이다. 프로젝트 `.claude/korean-polishing-rules.md` 나 개인 `~/.claude/korean-polishing-rules.md` 가 있으면 이 룰에 병합된다 (형식은 이 파일과 같게 쓴다).
+이 파일이 better-korean 플러그인의 표준 룰 원본이다. 프로젝트 `.claude/better-korean-rules.md` 나 개인 `~/.claude/better-korean-rules.md` 가 있으면 이 룰에 병합된다 (형식은 이 파일과 같게 쓴다).
 
 한국어 산출물(문서, 테이블·컬럼 comment, 분석 보고서, PR 본문)은 사람과 후속 AI 에이전트가 그대로 활용하는 자산이다. 기준은 하나다: 처음 읽는 사람과 AI 에이전트가 문장만 보고 의미를 특정할 수 있어야 한다. 낯선 문어체 압축어·임의 번역어는 반 줄 길어져도 예시가 붙은 풀어 쓴 표현 + 원어 병기로 쓴다.
 

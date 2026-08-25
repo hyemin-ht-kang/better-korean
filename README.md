@@ -1,4 +1,6 @@
-# korean-polishing
+# better-korean
+
+**Make AI-written Korean actually Korean.**
 
 AI 가 쓴 한국어 문서에 흔히 남는 어색하고 장황한 말투를 사람이 실제로 쓰는 자연스러운 표현으로 고치는 Claude Code 플러그인입니다. 서술을 한자어 명사 하나에 눌러 담은 압축 조어, 실제 메커니즘을 가리는 은유 문장, 동사 없이 명사만 늘어놓은 직역투, 뜻이 통하지 않게 발음만 한글로 옮겨 적은 영어 표기처럼 읽는 사람을 한 번 멈추게 만드는 표현을 찾아 풀어 쓴 대체 표현을 제시합니다.
 
@@ -9,18 +11,18 @@ AI 가 쓴 한국어 문서에 흔히 남는 어색하고 장황한 말투를 �
 마켓플레이스를 등록한 다음 플러그인을 설치합니다.
 
 ```sh
-claude plugin marketplace add hyemin-ht-kang/korean-polishing
-claude plugin install korean-polishing@hmk-tools
+claude plugin marketplace add hyemin-ht-kang/better-korean
+claude plugin install better-korean@hmk-tools
 ```
 
 Claude Code 세션 안에서는 슬래시 커맨드로도 같은 일을 할 수 있습니다.
 
 ```
-/plugin marketplace add hyemin-ht-kang/korean-polishing
-/plugin install korean-polishing@hmk-tools
+/plugin marketplace add hyemin-ht-kang/better-korean
+/plugin install better-korean@hmk-tools
 ```
 
-설치가 끝나면 `/polish-ko` 를 쓸 수 있습니다.
+설치가 끝나면 `/better-korean:polish` 를 쓸 수 있습니다.
 
 ### 팀 전체가 쓰게 하려면
 
@@ -32,12 +34,12 @@ Claude Code 세션 안에서는 슬래시 커맨드로도 같은 일을 할 수 
     "hmk-tools": {
       "source": {
         "source": "github",
-        "repo": "hyemin-ht-kang/korean-polishing"
+        "repo": "hyemin-ht-kang/better-korean"
       }
     }
   },
   "enabledPlugins": {
-    "korean-polishing@hmk-tools": true
+    "better-korean@hmk-tools": true
   }
 }
 ```
@@ -49,8 +51,8 @@ Claude Code 세션 안에서는 슬래시 커맨드로도 같은 일을 할 수 
 검증 대상을 지정하는 방법이 두 가지 있습니다.
 
 ```
-/polish-ko <파일 경로>   # 그 파일 전체를 검증합니다
-/polish-ko               # git diff(스테이징 포함)에서 추가된 텍스트 줄만 검증합니다
+/better-korean:polish <파일 경로>   # 그 파일 전체를 검증합니다
+/better-korean:polish               # git diff(스테이징 포함)에서 추가된 텍스트 줄만 검증합니다
 ```
 
 검증 결과는 `위치 | 층(grep/판독) | 위반 룰 | 수정 제안` 표로 보고되고, 파일 수정은 확인을 받은 뒤에 진행합니다. 확신이 낮은 항목은 버리지 않고 판단이 필요한 건으로 남기기 때문에, 최종 판정은 작성자가 내리게 됩니다.
@@ -69,13 +71,13 @@ CI 로 돌리려면 `examples/pr-review.yml` 을 대상 레포에 복사합니�
 
 | 위치 | 성격 |
 |---|---|
-| `skills/polish-ko/default-rules.md` | 이 플러그인이 제공하는 표준 룰입니다. 설치만 하면 이 룰로 검증됩니다. |
-| `~/.claude/korean-polishing-rules.md` | 개인이 추가한 룰입니다. 모든 프로젝트에 적용됩니다. |
-| `<레포>/.claude/korean-polishing-rules.md` | 팀이 공유하는 프로젝트 룰입니다. |
+| `skills/polish/default-rules.md` | 이 플러그인이 제공하는 표준 룰입니다. 설치만 하면 이 룰로 검증됩니다. |
+| `~/.claude/better-korean-rules.md` | 개인이 추가한 룰입니다. 모든 프로젝트에 적용됩니다. |
+| `<레포>/.claude/better-korean-rules.md` | 팀이 공유하는 프로젝트 룰입니다. |
 
 항목은 합집합으로 합치고, 같은 항목이 충돌하면 프로젝트 룰이 개인 룰을, 개인 룰이 표준 룰을 이깁니다. 그래서 표준 룰이 금지한 단어를 특정 프로젝트에서 쓰고 싶으면 프로젝트 룰 파일에 예외로 선언하면 됩니다. 룰 파일을 새로 만들 때는 표준 룰과 같은 구조로 쓰고, 금지어는 `금지어 → "대체 표현"` 형식으로 적어야 grep 패스가 파싱할 수 있습니다.
 
-프로젝트 CLAUDE.md 가 룰 파일을 `@.claude/korean-polishing-rules.md` 로 import 하면, 검증할 때만 읽히는 것이 아니라 매 세션 주입되어 문서를 작성하는 시점에도 룰이 적용됩니다. 권장하는 구성입니다.
+프로젝트 CLAUDE.md 가 룰 파일을 `@.claude/better-korean-rules.md` 로 import 하면, 검증할 때만 읽히는 것이 아니라 매 세션 주입되어 문서를 작성하는 시점에도 룰이 적용됩니다. 권장하는 구성입니다.
 
 ## 룰을 계속 추가해 나가는 것이 이 플러그인의 사용법입니다
 
@@ -84,12 +86,12 @@ CI 로 돌리려면 `examples/pr-review.yml` 을 대상 레포에 복사합니�
 ## 구조
 
 ```
-korean-polishing/
+better-korean/
 ├── .claude-plugin/
 │   ├── plugin.json          # 플러그인 매니페스트
 │   └── marketplace.json     # 마켓플레이스 목록
 ├── skills/
-│   └── polish-ko/
+│   └── polish/
 │       ├── SKILL.md         # 검증 절차 (룰 본문은 담지 않습니다)
 │       └── default-rules.md # 표준 룰 원본
 ├── scripts/

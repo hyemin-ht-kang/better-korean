@@ -1,11 +1,11 @@
-# korean-polishing PR 리뷰 워크플로 템플릿
+# better-korean PR 리뷰 워크플로 템플릿
 #
 # 사용법: 이 파일을 대상 레포의 .github/workflows/ 에 복사하고,
 # 1) paths 를 그 레포에서 한국어 문서가 바뀌는 경로에 맞게 고친다
 # 2) ANTHROPIC_API_KEY 시크릿을 레포에 등록한다
 #
 # non-blocking: 검증 결과와 무관하게 워크플로는 성공으로 끝난다.
-name: korean-polishing review
+name: better-korean review
 
 on:
   pull_request:
@@ -17,7 +17,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  polish-ko:
+  polish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,12 +27,12 @@ jobs:
       - name: Install Claude Code
         run: npm install -g @anthropic-ai/claude-code
 
-      - name: Install korean-polishing plugin
+      - name: Install better-korean plugin
         run: |
           claude plugin marketplace add <marketplace-repo-url>   # TODO: marketplace 레포 URL 로 교체
-          claude plugin install korean-polishing --yes
+          claude plugin install better-korean --yes
 
-      - name: Run polish-ko and submit review
+      - name: Run polish and submit review
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -40,8 +40,8 @@ jobs:
         run: |
           # 스킬의 CI 보고 절차를 따르게 한다: 위반을 모아 하나의 리뷰 세션
           # (인라인 suggestion + 요약 본문, event: COMMENT)으로 제출하고 exit 0.
-          claude -p "polish-ko 스킬로 이 PR(#${PR_NUMBER})의 변경분을 윤문 검증하고, \
+          claude -p "polish 스킬로 이 PR(#${PR_NUMBER})의 변경분을 윤문 검증하고, \
             스킬의 CI 보고 절차에 따라 gh api 로 리뷰 세션 하나를 제출해줘. \
             위반이 없으면 리뷰를 제출하지 말고 종료해줘." \
             --allowedTools "Bash,Read,Grep,Glob,Skill" \
-            || echo "polish-ko review failed (non-blocking)"
+            || echo "polish review failed (non-blocking)"
