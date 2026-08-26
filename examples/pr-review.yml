@@ -29,8 +29,8 @@ jobs:
 
       - name: Install better-korean plugin
         run: |
-          claude plugin marketplace add <marketplace-repo-url>   # TODO: marketplace 레포 URL 로 교체
-          claude plugin install better-korean --yes
+          claude plugin marketplace add hyemin-ht-kang/better-korean
+          claude plugin install better-korean@hmk-tools --yes
 
       - name: Run polish and submit review
         env:

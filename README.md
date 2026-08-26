@@ -130,6 +130,13 @@ better-korean/
 
 표준 룰을 확장하는 것은 관리자가 하는 일입니다. 개인 룰 파일에 쌓인 항목 중 여러 프로젝트에 공통으로 적용할 만한 것을 `default-rules.md` 로 옮기고, `plugin.json` 의 `version` 을 올려 배포합니다. 사용자는 이 값이 바뀔 때 업데이트를 받습니다.
 
+사용자가 새 버전을 받으려면 마켓플레이스를 갱신한 뒤 플러그인을 업데이트합니다.
+
+```sh
+claude plugin marketplace update hmk-tools
+claude plugin update better-korean@hmk-tools
+```
+
 ## 라이선스
 
 [MIT](LICENSE)
