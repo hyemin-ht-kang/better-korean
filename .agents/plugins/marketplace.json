@@ -1,0 +1,20 @@
+{
+  "name": "hmk-tools",
+  "interface": {
+    "displayName": "hmk-tools"
+  },
+  "plugins": [
+    {
+      "name": "better-korean",
+      "source": {
+        "source": "local",
+        "path": "./plugins/better-korean"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

@@ -5,6 +5,9 @@
 # 2) ANTHROPIC_API_KEY 시크릿을 레포에 등록한다
 #
 # non-blocking: 검증 결과와 무관하게 워크플로는 성공으로 끝난다.
+#
+# 이 템플릿은 Claude Code 로 실행한다. Codex 로 실행하려면 설치 단계를
+# `codex plugin marketplace add` / `codex plugin add` 로, 실행 단계를 `codex exec` 로 바꾼다.
 name: better-korean review
 
 on:

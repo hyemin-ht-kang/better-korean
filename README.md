@@ -2,13 +2,15 @@
 
 **Make AI-written Korean actually Korean.**
 
-AI 가 쓴 한국어 IT·기술 문서에 흔히 남는 어색하고 장황한 말투를 사람이 실제로 쓰는 자연스러운 표현으로 고치는 Claude Code 플러그인입니다. 서술을 한자어 명사 하나로 압축한 조어, 실제 메커니즘을 가리는 은유 문장, 동사 없이 명사만 늘어놓은 직역투, 뜻이 통하지 않게 발음만 한글로 옮겨 적은 영어 표기처럼 읽는 사람을 한 번 멈추게 만드는 표현을 찾아 풀어 쓴 대체 표현을 제시합니다. 표준 룰은 소프트웨어·데이터 문서를 기준으로 만들어져 있어서, 다른 분야에서는 정상 용어인 단어가 금지어에 들어 있을 수 있는데, 그런 단어는 프로젝트 룰 파일에 예외로 선언해 허용할 수 있습니다.
+AI 가 쓴 한국어 IT·기술 문서에 흔히 남는 어색하고 장황한 말투를 사람이 실제로 쓰는 자연스러운 표현으로 고치는 플러그인입니다. Claude Code 와 Codex 에 같은 스킬이 설치되어 어느 쪽에서 써도 같은 룰로 검증합니다. 서술을 한자어 명사 하나로 압축한 조어, 실제 메커니즘을 가리는 은유 문장, 동사 없이 명사만 늘어놓은 직역투, 뜻이 통하지 않게 발음만 한글로 옮겨 적은 영어 표기처럼 읽는 사람을 한 번 멈추게 만드는 표현을 찾아 풀어 쓴 대체 표현을 제시합니다. 표준 룰은 소프트웨어·데이터 문서를 기준으로 만들어져 있어서, 다른 분야에서는 정상 용어인 단어가 금지어에 들어 있을 수 있는데, 그런 단어는 프로젝트 룰 파일에 예외로 선언해 허용할 수 있습니다.
 
 문서와 테이블 comment, 분석 보고서, PR 본문은 사람만 읽는 글이 아니라 후속 AI 에이전트가 읽고 그대로 활용하는 데이터 자산이므로, 문장이 어색하거나 부정확하면 그 문장을 읽은 에이전트가 의미를 잘못 이해한 채 작업을 이어가고 그 오류가 다음 산출물로 이어집니다. 그래서 이 플러그인은 처음 읽는 사람과 AI 에이전트가 문장만 보고 의미를 특정할 수 있는지를 기준으로 검증합니다.
 
 ## 설치
 
 마켓플레이스를 등록한 다음 플러그인을 설치합니다.
+
+### Claude Code
 
 ```sh
 claude plugin marketplace add hyemin-ht-kang/better-korean
@@ -23,6 +25,15 @@ Claude Code 세션 안에서는 슬래시 커맨드로도 같은 일을 할 수 
 ```
 
 설치가 끝나면 `/better-korean:polish` 를 쓸 수 있습니다.
+
+### Codex
+
+```sh
+codex plugin marketplace add hyemin-ht-kang/better-korean
+codex plugin add better-korean@hmk-tools
+```
+
+설치 뒤 새 스레드를 열면 `$polish` 를 쓸 수 있습니다. 플러그인 없이 스킬만 쓰려면 `plugins/better-korean/skills/polish/` 를 `~/.agents/skills/polish/`(개인) 또는 `<레포>/.agents/skills/polish/`(프로젝트)에 복사해도 됩니다.
 
 ### 팀 전체가 쓰게 하려면
 
@@ -51,7 +62,7 @@ Claude Code 세션 안에서는 슬래시 커맨드로도 같은 일을 할 수 
 
 ## 사용
 
-검증 대상은 파일 경로를 넘기거나 인자 없이 불러서 지정합니다.
+검증 대상은 파일 경로를 넘기거나 인자 없이 불러서 지정합니다. Codex 에서는 `/better-korean:polish` 대신 `$polish` 로 부릅니다.
 
 ```
 /better-korean:polish <파일 경로>   # 그 파일 전체를 검증합니다
@@ -103,44 +114,77 @@ CI 로 돌리려면 `examples/pr-review.yml` 을 대상 레포에 복사합니�
 
 | 위치 | 성격 |
 |---|---|
-| `skills/polish/default-rules.md` | 이 플러그인이 제공하는 표준 룰입니다. 설치만 하면 이 룰로 검증됩니다. |
-| `~/.claude/better-korean-rules.md` | 개인이 추가한 룰입니다. 모든 프로젝트에 적용됩니다. |
-| `<레포>/.claude/better-korean-rules.md` | 팀이 공유하는 프로젝트 룰입니다. |
+| `plugins/better-korean/skills/polish/default-rules.md` | 이 플러그인이 제공하는 표준 룰입니다. 설치만 하면 이 룰로 검증됩니다. |
+| `~/.agents/better-korean-rules.md` | 개인이 추가한 룰입니다. 모든 프로젝트에 적용됩니다. |
+| `<레포>/.agents/better-korean-rules.md` | 팀이 공유하는 프로젝트 룰입니다. |
+
+개인·프로젝트 룰을 `.agents/` 에 두는 이유는 Claude Code 와 Codex 가 같은 파일을 읽게 하기 위해서입니다. 클라이언트마다 다른 파일을 읽으면 어느 쪽에서 쓰느냐에 따라 결과가 달라집니다. 이전 버전이 쓰던 `~/.claude/better-korean-rules.md` 와 `<레포>/.claude/better-korean-rules.md` 는 더 이상 읽지 않으며, 그 자리에 파일이 있으면 보고서 머리에 옮기라는 경고가 나옵니다.
 
 항목은 합집합으로 합치고, 같은 항목이 충돌하면 프로젝트 룰이 개인 룰을, 개인 룰이 표준 룰을 이깁니다. 그래서 표준 룰이 금지한 단어를 특정 프로젝트에서 쓰고 싶으면 프로젝트 룰 파일에 예외로 선언하면 됩니다. 룰 파일을 새로 만들 때는 표준 룰과 같은 구조로 쓰고, 금지어는 `금지어 → "대체 표현"` 형식으로 적어야 grep 패스가 파싱할 수 있습니다.
 
-프로젝트 CLAUDE.md 가 룰 파일을 `@.claude/better-korean-rules.md` 로 import 하면, 검증할 때만 읽히는 것이 아니라 매 세션 주입되어 문서를 작성하는 시점에도 룰이 적용됩니다. 권장하는 구성입니다.
+## 글을 쓰는 시점에도 룰을 적용하려면
+
+검증은 설치만 하면 동작하지만, 글을 쓰는 시점부터 룰이 적용되게 하려면 세션마다 룰이 지침으로 주입되어야 합니다. 이 설정은 선택 사항이고, 설치가 CLAUDE.md 나 AGENTS.md 를 자동으로 고치지는 않습니다. 스킬을 레포에서 처음 실행하면 설정할지 한 번 묻고, 동의할 때만 아래 스크립트를 실행합니다.
+
+주입에는 전체 룰 대신 원칙만 추린 요약본(`summary-rules.md`)을 씁니다. 전체 룰은 금지어별 대체 표현까지 들어 있어 세션마다 아래만큼 컨텍스트를 씁니다.
+
+| | Claude 토큰 | Codex 토큰 |
+|---|---|---|
+| 요약본 | 약 1,600 | 약 1,000 |
+| 전체 룰 | 약 9,000 | 약 5,800 |
+
+요약본은 지침 파일 안의 생성 블록으로 넣습니다. Codex 의 AGENTS.md 에는 다른 파일을 import 하는 문법이 없고, 플러그인 설치 경로는 버전마다 달라 Claude Code 의 `@` import 로도 가리킬 수 없어서, 두 클라이언트 모두 같은 방식을 씁니다.
+
+```sh
+# Claude Code: 프로젝트 CLAUDE.md 또는 ~/.claude/CLAUDE.md
+sh <스킬 디렉토리>/scripts/sync-rules-block.sh CLAUDE.md <스킬 디렉토리>/summary-rules.md
+
+# Codex: 레포 AGENTS.md 또는 ~/.codex/AGENTS.md
+sh <스킬 디렉토리>/scripts/sync-rules-block.sh AGENTS.md <스킬 디렉토리>/summary-rules.md
+```
+
+스크립트는 `<!-- better-korean:begin -->` 과 `<!-- better-korean:end -->` 사이만 갈아 끼우고 블록 밖은 건드리지 않습니다. 개인·프로젝트에서 요약에 더 넣을 원칙은 `~/.agents/better-korean-summary.md` 와 `<레포>/.agents/better-korean-summary.md` 에 적고 스크립트 인자로 뒤에 붙입니다. Codex 는 글로벌과 레포 AGENTS.md 를 합쳐 기본 32 KiB 까지만 읽으므로 블록은 한쪽에만 두고, 스크립트가 출력하는 크기 경고를 확인합니다.
 
 ## 룰을 계속 추가해 나가는 것이 이 플러그인의 사용법입니다
 
-어색한 표현은 실제 문서를 쓰고 읽는 과정에서 발견되므로, 룰 목록은 쓰면서 늘려 갑니다. 룰 파일이 `.claude/` 하위에 있어 눈에 덜 띄고 갱신을 잊기 쉬우므로, 스킬이 이 일을 챙깁니다. 세션 중에 표현을 정정하면 그 항목을 룰에 추가할지 묻고, 개인 룰과 프로젝트 룰 중 어디에 넣을지 함께 제안합니다.
+어색한 표현은 실제 문서를 쓰고 읽는 과정에서 발견되므로, 룰 목록은 쓰면서 늘려 갑니다. 룰 파일이 `.agents/` 하위에 있어 눈에 덜 띄고 갱신을 잊기 쉬우므로, 스킬이 이 일을 챙깁니다. 세션 중에 표현을 정정하면 그 항목을 룰에 추가할지 묻고, 개인 룰과 프로젝트 룰 중 어디에 넣을지 함께 제안합니다. 글을 쓰는 시점에 알아야 할 원칙이면 요약본에도 반영할지 묻고, 지침 파일에 블록이 있으면 갱신까지 이어서 합니다.
 
 ## 구조
 
+두 클라이언트가 같은 디렉토리를 설치하고, 매니페스트만 다릅니다.
+
 ```
 better-korean/
-├── .claude-plugin/
-│   ├── plugin.json          # 플러그인 매니페스트
-│   └── marketplace.json     # 마켓플레이스 목록
-├── skills/
-│   └── polish/
-│       ├── SKILL.md         # 검증 절차 (룰 본문은 두지 않습니다)
-│       └── default-rules.md # 표준 룰 원본
-├── scripts/
-│   └── grep-pass.sh         # 금지어 쌍을 파싱해 기계 검색하는 스크립트
+├── .claude-plugin/marketplace.json     # Claude Code 마켓플레이스 목록
+├── .agents/plugins/marketplace.json    # Codex 마켓플레이스 목록
+├── plugins/better-korean/              # 두 목록이 가리키는 설치 대상
+│   ├── .claude-plugin/plugin.json      # Claude Code 플러그인 매니페스트
+│   ├── .codex-plugin/plugin.json       # Codex 플러그인 매니페스트
+│   └── skills/polish/
+│       ├── SKILL.md                    # 검증 절차 (룰 본문은 두지 않습니다)
+│       ├── default-rules.md            # 표준 룰 원본
+│       ├── summary-rules.md            # 글을 쓰는 시점에 주입하는 요약
+│       └── scripts/
+│           ├── grep-pass.sh            # 금지어 쌍을 파싱해 기계 검색
+│           └── sync-rules-block.sh     # 지침 파일의 요약 블록 갱신
 └── examples/
-    └── pr-review.yml        # PR 리뷰 워크플로 템플릿
+    └── pr-review.yml                   # PR 리뷰 워크플로 템플릿
 ```
 
 ## 관리자용 안내
 
-표준 룰을 확장하는 것은 관리자가 하는 일입니다. 개인 룰 파일에 쌓인 항목 중 여러 프로젝트에 공통으로 적용할 만한 것을 `default-rules.md` 로 옮기고, `plugin.json` 의 `version` 을 올려 배포합니다. 사용자는 이 값이 바뀔 때 업데이트를 받습니다.
+표준 룰을 확장하는 것은 관리자가 하는 일입니다. 개인 룰 파일에 쌓인 항목 중 여러 프로젝트에 공통으로 적용할 만한 것을 `default-rules.md` 로 옮기고, `.claude-plugin/plugin.json` 과 `.codex-plugin/plugin.json` 의 `version` 을 같은 값으로 올려 배포합니다. 사용자는 이 값이 바뀔 때 업데이트를 받습니다.
 
 사용자가 새 버전을 받으려면 마켓플레이스를 갱신한 뒤 플러그인을 업데이트합니다.
 
 ```sh
+# Claude Code
 claude plugin marketplace update hmk-tools
 claude plugin update better-korean@hmk-tools
+
+# Codex
+codex plugin marketplace upgrade hmk-tools
+codex plugin add better-korean@hmk-tools
 ```
 
 버전별 변경 내용은 [Releases 페이지](https://github.com/hyemin-ht-kang/better-korean/releases)에서 확인할 수 있습니다.

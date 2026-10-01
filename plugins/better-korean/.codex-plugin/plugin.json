@@ -1,0 +1,34 @@
+{
+  "name": "better-korean",
+  "version": "0.3.0",
+  "description": "AI 가 쓴 한국어 문서의 어색하고 장황한 말투를 자연스러운 표현으로 고칩니다. 압축 조어, 은유 문장, 명사 나열 직역투를 찾아 수정을 제안합니다.",
+  "author": {
+    "name": "hyemin-ht-kang",
+    "url": "https://github.com/hyemin-ht-kang"
+  },
+  "homepage": "https://github.com/hyemin-ht-kang/better-korean",
+  "repository": "https://github.com/hyemin-ht-kang/better-korean",
+  "license": "MIT",
+  "keywords": [
+    "korean",
+    "writing",
+    "review",
+    "documentation",
+    "prose"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Better Korean",
+    "shortDescription": "AI 가 쓴 한국어 문서의 어색한 표현을 자연스럽게 고칩니다.",
+    "longDescription": "한국어 문서·PR 본문·comment 에서 압축 조어, 은유 문장, 명사 나열 직역투, 발음만 한글로 옮긴 영어 표기를 찾아 풀어 쓴 대체 표현을 제안합니다. 표준 룰 위에 개인·프로젝트 룰을 병합해 검증합니다.",
+    "developerName": "hyemin-ht-kang",
+    "category": "Productivity",
+    "capabilities": [
+      "Read"
+    ],
+    "defaultPrompt": [
+      "이 문서를 윤문 검증해줘",
+      "방금 쓴 PR 본문을 다듬어줘"
+    ]
+  }
+}
