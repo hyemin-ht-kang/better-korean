@@ -6,7 +6,8 @@
           {
             "type": "command",
             "command": "\"${CLAUDE_PLUGIN_ROOT}\"/skills/polish/scripts/check-rules-block.sh",
-            "timeout": 10
+            "timeout": 10,
+            "statusMessage": "better-korean: 요약 룰 블록 버전 확인"
           }
         ]
       }
