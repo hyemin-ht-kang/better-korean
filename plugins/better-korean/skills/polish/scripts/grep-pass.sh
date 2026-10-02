@@ -1,6 +1,8 @@
 #!/bin/sh
 # 병합된 윤문 룰 파일들에서 `- 금지어 → "대체 표현"` 쌍을 파싱해,
-# 대상 파일에서 금지어 히트를 찾는다. fenced code block(```/~~~, 0~3칸 들여쓰기) 내부는 제외한다.
+# 대상 파일에서 금지어 히트를 찾는다. fenced code block(```/~~~, 0~3칸 들여쓰기) 내부와,
+# sync-rules-block.sh 가 CLAUDE.md/AGENTS.md 에 생성하는 better-korean 마커 블록
+# (<!-- better-korean:begin --> … <!-- better-korean:end -->) 내부는 제외한다.
 # 출력: <파일>:<줄>	<금지어>	<대체 표현>	<해당 줄 원문>
 #
 # usage: grep-pass.sh <rules.md ...> -- <target ...>
@@ -54,7 +56,7 @@ done
 
 # 룰 파싱: 나중 파일의 같은 금지어가 앞의 것을 덮어쓴다(병합 우선순위).
 awk '
-  FNR == 1 { in_code = 0 }
+  FNR == 1 { in_code = 0; in_block = 0 }
   is_rule {
     if ($0 ~ /^- .* → /) {
       l = $0
@@ -75,6 +77,12 @@ awk '
       if (term != "") terms[term] = repl
     }
     next
+  }
+  # 대상 파일: better-korean 마커 블록 상태기 (룰을 이름으로 부르는 생성 블록이라 검색하지 않는다)
+  {
+    if ($0 ~ /^[ \t]*<!-- better-korean:begin -->[ \t]*$/) { in_block = 1; next }
+    if ($0 ~ /^[ \t]*<!-- better-korean:end -->[ \t]*$/) { in_block = 0; next }
+    if (in_block) next
   }
   # 대상 파일: fenced code block 상태기 (0~3칸 들여쓰기, ``` 또는 ~~~, 여는 길이 이상으로 닫힘)
   {
