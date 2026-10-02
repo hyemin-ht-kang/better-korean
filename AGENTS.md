@@ -3,7 +3,7 @@
 ## 구조
 
 - 이 레포는 Claude Code 와 Codex 에 같이 설치되는 플러그인 하나를 배포한다.
-- 구현은 `plugins/better-korean/skills/polish/` 에 있다. `SKILL.md` 가 검증 절차, `default-rules.md` 가 전체 룰, `summary-rules.md` 가 작성 시점 주입용 요약, `scripts/` 가 grep 검색과 지침 파일 블록 갱신 스크립트다.
+- 구현은 `plugins/better-korean/skills/polish/` 에 있다. `SKILL.md` 가 검증 절차, `default-rules.md` 가 전체 룰, `summary-rules.md` 가 작성 시점 주입용 요약, `scripts/` 가 grep 검색, 지침 파일 블록 갱신, 세션 시작 훅 스크립트다. `plugins/better-korean/hooks/hooks.json` 이 그 훅을 SessionStart 에 등록한다.
 - `.claude-plugin/marketplace.json` 과 `.agents/plugins/marketplace.json` 은 둘 다 `plugins/better-korean/` 을 가리킨다.
 - 루트의 README, examples 는 설치본에 들어가지 않는다.
 

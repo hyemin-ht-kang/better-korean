@@ -68,7 +68,9 @@ description: 한국어 텍스트에서 어색하고 장황한 표현을 찾아 �
 2. 개인 `~/.agents/better-korean-summary.md`: 있으면 뒤에 이어 붙임
 3. 프로젝트 `<repo root>/.agents/better-korean-summary.md`: 있으면 뒤에 이어 붙임
 
-주입은 지침 파일 안의 생성 블록으로 한다. 이 스킬 디렉토리의 `scripts/sync-rules-block.sh <지침 파일> <요약본...>` 을 실행하면 지침 파일 안의 `<!-- better-korean:begin -->` … `<!-- better-korean:end -->` 블록이 병합된 요약본으로 갱신되고, 블록이 없으면 끝에 추가되며, 블록 밖은 바뀌지 않는다. 블록 머리의 `<!-- better-korean:sources: ... -->` 주석에 입력 파일 목록이 기록되므로, 블록을 다시 생성할 때는 그 목록을 그대로 인자로 넘긴다. 목록의 `builtin` 은 이 스킬 디렉토리의 `summary-rules.md` 다. 플러그인 내장 요약본은 설치 위치가 버전마다 달라 import 로 가리킬 수 없고, Codex 의 AGENTS.md 는 import 문법 자체가 없으므로, 두 클라이언트 모두 같은 방식을 쓴다.
+주입은 지침 파일 안의 생성 블록으로 한다. 이 스킬 디렉토리의 `scripts/sync-rules-block.sh <지침 파일> <요약본...>` 을 실행하면 지침 파일 안의 `<!-- better-korean:begin -->` … `<!-- better-korean:end -->` 블록이 병합된 요약본으로 갱신되고, 블록이 없으면 끝에 추가되며, 블록 밖은 바뀌지 않는다. 블록 머리의 `<!-- better-korean:version: ... -->` 주석에 블록을 만든 플러그인 버전이, `<!-- better-korean:sources: ... -->` 주석에 입력 파일 목록이 기록된다. 블록을 다시 생성할 때는 그 목록을 그대로 인자로 넘기고, 목록의 `builtin` 은 이 스킬 디렉토리의 `summary-rules.md` 로 치환한다.
+
+플러그인이 업데이트되면 내장 요약본이 바뀌어도 블록은 그대로 남는다. 세션 시작 훅(`scripts/check-rules-block.sh`)이 블록의 version 과 설치 버전을 비교해 다르면 그 사실을 세션 컨텍스트에 한 줄로 알린다. 이 스킬을 실행할 때는 현재 클라이언트의 지침 파일에서 같은 비교를 직접 하고, 블록이 구버전이면 보고 끝에 "요약 룰 블록이 X.Y.Z 기준입니다. 갱신할까요?"라고 묻고 동의할 때만 재생성한다. 플러그인 내장 요약본은 설치 위치가 버전마다 달라 import 로 가리킬 수 없고, Codex 의 AGENTS.md 는 import 문법 자체가 없으므로, 두 클라이언트 모두 같은 방식을 쓴다.
 
 - **Claude Code**: 대상은 프로젝트 CLAUDE.md 또는 개인 `~/.claude/CLAUDE.md`.
 - **Codex**: 대상은 레포 AGENTS.md 또는 글로벌 `~/.codex/AGENTS.md`. Codex 는 두 파일을 합쳐 기본 32 KiB(`project_doc_max_bytes`)까지만 읽으므로 블록은 한쪽에만 두고, 스크립트가 출력하는 크기 경고를 확인한다.

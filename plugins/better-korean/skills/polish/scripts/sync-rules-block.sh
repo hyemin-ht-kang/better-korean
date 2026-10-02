@@ -6,7 +6,9 @@
 # usage: sync-rules-block.sh <CLAUDE.md|AGENTS.md> <summary.md ...>
 # exit: 0 정상, 2 사용법 오류 또는 읽을 수 없는 파일
 #
-# 블록 머리 주석에 입력 파일 목록을 기록한다. 플러그인 내장 요약본(스킬 디렉토리의 summary-rules.md)은
+# 블록 머리 주석에 플러그인 버전과 입력 파일 목록을 기록한다. 버전은 이 스크립트가 든 플러그인의
+# .claude-plugin/plugin.json 에서 읽으며, 세션 시작 훅(check-rules-block.sh)이 설치 버전과 비교해
+# 블록이 구버전이면 안내한다. 플러그인 내장 요약본(스킬 디렉토리의 summary-rules.md)은
 # 설치 경로가 버전마다 바뀌므로 경로 대신 `builtin` 으로 적고, 다시 생성할 때 스킬이 자기 디렉토리의
 # summary-rules.md 로 치환한다.
 #
@@ -17,6 +19,10 @@
 set -u
 
 BEGIN_MARK='<!-- better-korean:begin -->'
+script_dir=$(cd "$(dirname "$0")" && pwd)
+plugin_root=$(cd "$script_dir/../../.." && pwd)
+version=$(sed -n 's/^[[:space:]]*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$plugin_root/.claude-plugin/plugin.json" 2>/dev/null | head -1)
+[ -n "$version" ] || version=unknown
 END_MARK='<!-- better-korean:end -->'
 LIMIT=32768
 SUMMARY_LIMIT=2500
@@ -51,6 +57,7 @@ done
 {
   echo "$BEGIN_MARK"
   echo "<!-- 이 블록은 better-korean 의 sync-rules-block.sh 가 생성한다. 손으로 고치지 말고 요약 룰 파일을 고친 뒤 다시 실행한다. -->"
+  echo "<!-- better-korean:version: $version -->"
   echo "<!-- better-korean:sources: $sources -->"
   first=1
   for f in "$@"; do

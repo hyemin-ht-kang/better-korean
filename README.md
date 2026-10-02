@@ -148,7 +148,7 @@ sh <스킬 디렉토리>/scripts/sync-rules-block.sh CLAUDE.md <스킬 디렉토
 sh <스킬 디렉토리>/scripts/sync-rules-block.sh AGENTS.md <스킬 디렉토리>/summary-rules.md
 ```
 
-스크립트는 `<!-- better-korean:begin -->` 과 `<!-- better-korean:end -->` 사이만 갈아 끼우고 블록 밖은 건드리지 않습니다. 개인·프로젝트에서 요약에 더 넣을 원칙은 `~/.agents/better-korean-summary.md` 와 `<레포>/.agents/better-korean-summary.md` 에 적고 스크립트 인자로 뒤에 붙입니다. Codex 는 글로벌과 레포 AGENTS.md 를 합쳐 기본 32 KiB 까지만 읽으므로 블록은 한쪽에만 두고, 스크립트가 출력하는 크기 경고를 확인합니다.
+스크립트는 `<!-- better-korean:begin -->` 과 `<!-- better-korean:end -->` 사이만 갈아 끼우고 블록 밖은 건드리지 않습니다. 블록 머리에는 만든 플러그인 버전과 입력 파일 목록이 기록됩니다. 플러그인을 업데이트하면 세션 시작 훅이 블록 버전과 설치 버전을 비교해 다를 때 안내를 띄우고, `polish` 를 실행하면 갱신 여부를 묻습니다. Codex 는 플러그인에 번들된 훅을 사용자가 검토해 신뢰한 뒤에만 실행하므로, 설치 후 Codex 가 훅 신뢰를 물으면 승인해야 안내가 동작합니다. 개인·프로젝트에서 요약에 더 넣을 원칙은 `~/.agents/better-korean-summary.md` 와 `<레포>/.agents/better-korean-summary.md` 에 적고 스크립트 인자로 뒤에 붙입니다. Codex 는 글로벌과 레포 AGENTS.md 를 합쳐 기본 32 KiB 까지만 읽으므로 블록은 한쪽에만 두고, 스크립트가 출력하는 크기 경고를 확인합니다.
 
 ## 플러그인을 사용하시면서 룰을 계속 추가해보세요
 
@@ -165,13 +165,15 @@ better-korean/
 ├── plugins/better-korean/              # 두 목록이 가리키는 설치 대상
 │   ├── .claude-plugin/plugin.json      # Claude Code 플러그인 매니페스트
 │   ├── .codex-plugin/plugin.json       # Codex 플러그인 매니페스트
+│   ├── hooks/hooks.json                # 세션 시작 훅 (요약 블록 버전 안내)
 │   └── skills/polish/
 │       ├── SKILL.md                    # 검증 절차 (룰 본문은 두지 않습니다)
 │       ├── default-rules.md            # 표준 룰 원본
 │       ├── summary-rules.md            # 글을 쓰는 시점에 주입하는 요약
 │       └── scripts/
 │           ├── grep-pass.sh            # 금지어 쌍을 파싱해 기계 검색
-│           └── sync-rules-block.sh     # 지침 파일의 요약 블록 갱신
+│           ├── sync-rules-block.sh     # 지침 파일의 요약 블록 갱신
+│           └── check-rules-block.sh    # 블록 버전과 설치 버전 비교
 └── examples/
     └── pr-review.yml                   # PR 리뷰 워크플로 템플릿
 ```

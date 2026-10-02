@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/skills/polish/scripts/check-rules-block.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
